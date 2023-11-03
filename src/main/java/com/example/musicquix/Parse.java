@@ -1,5 +1,8 @@
 package com.example.musicquix;
 
+import com.example.musicquix.repository.AuthorRepository;
+import com.example.musicquix.repository.SongRepository;
+import com.example.musicquix.repository.TextTrackRepository;
 import lombok.Data;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -7,80 +10,64 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Data
 @Component
 public class Parse {
 
 
+   private final AuthorRepository authorRepository;
+   private final SongRepository songRepository;
+   private final TextTrackRepository textTrackRepository;
 
 
-    public Parse() throws IOException {
+    public Parse(AuthorRepository authorRepository, SongRepository songRepository
+            , TextTrackRepository textTrackRepository) throws IOException {
+        this.authorRepository = authorRepository;
+        this.songRepository = songRepository;
+        this.textTrackRepository = textTrackRepository;
         parseFileSong();
     }
 
 
     public void parseFileSong() throws IOException {
-        File folder = new File("C://Downloaded Web Sites/alloflyrics.cc/test");
+        File folder = new File("C://Downloaded Web Sites/alloflyrics.cc/test/gg");
         File[] listFile = folder.listFiles();
 
         assert listFile != null;
-        for (File file: listFile) {
+        for (File file : listFile) {
             if (file.isFile()) {
                 Document doc = Jsoup.parse(file);
+                String tx = doc.outerHtml();
+
                 String text = doc.text();
-
                 String[] split = text.split("Текст песни");
-
                 String[] split2 = split[0].split(" - ");
-                String nameMusician = split2[0];
+                String nameMusician = split2[0]; //имя исполнителя
+                String nameSong = split2[1].replace(" текст песни", ""); // название песни
+                String textSong = textSong(tx); // текст песни
 
-                String nameSong = split2[1].replace(" текст песни", "");
 
-
-                System.out.println(nameMusician);
-                System.out.println(nameSong);
-                System.out.println(textSong(split));
             }
         }
 
     }
 
-    private String textSong(String[] split) {
-        String text;
+    private String textSong (String tx) {
         int index;
-        StringBuilder stb = new StringBuilder(split[1]);
-        String textSong = split[1];
-        index = textSong.indexOf("Комментарии");
-
-        String textSong1 = stb.substring(0, index);
-
-        if (textSong1.substring((index - 26), index).equals(" Прочитать перевод текста ")) {
-            text = textSong1.substring(0, (index - 26));
-        } else {
-            text = stb.substring(0, index);
+        index = tx.indexOf("jumbotron");
+        String tx2 = tx.substring(index+52);
+        index = tx2.indexOf("</p>");
+        tx2 = tx2.substring(0, index);
+        tx2 = tx2.replace("<br>", "");
+        if (tx2.contains("&nbsp;")) {
+            tx2 = tx2.replace("&nbsp;", " ");
         }
-
-        if (text.contains(" № Топ ")) {
-           int index2 = text.indexOf(" № Топ ");
-           return text.substring(0, index2);
-        }
-        return text;
+        return "         " + tx2;
     }
 
-   private boolean checkingTextForLanguage(String text) {
-        Pattern pattern = Pattern.compile(
-                "[" +                   //начало списка допустимых символов
-                        "а-яА-ЯёЁ" +    //буквы русского алфавита
-                        "\\d" +         //цифры
-                        "\\s" +         //знаки-разделители (пробел, табуляция и т.д.)
-                        "\\p{Punct}" +  //знаки пунктуации
-                        "]" +                   //конец списка допустимых символов
-                        "*");                   //допускается наличие указанных символов в любом количестве
+    private void addDatabase (String nameMusician, String nameSong, String textSong) {
 
-        Matcher matcher = pattern.matcher(text);
-        return matcher.matches();
     }
+
 }
