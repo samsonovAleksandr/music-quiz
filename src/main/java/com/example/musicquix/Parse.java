@@ -15,13 +15,15 @@ import java.util.regex.Pattern;
 public class Parse {
 
 
+
+
     public Parse() throws IOException {
         parseFileSong();
     }
 
 
     public void parseFileSong() throws IOException {
-        File folder = new File("C://Downloaded Web Sites/alloflyrics.cc/song/Andro");
+        File folder = new File("C://Downloaded Web Sites/alloflyrics.cc/test");
         File[] listFile = folder.listFiles();
 
         assert listFile != null;
@@ -38,29 +40,37 @@ public class Parse {
                 String nameSong = split2[1].replace(" текст песни", "");
 
 
-
-                System.out.println(textSong(split));
                 System.out.println(nameMusician);
                 System.out.println(nameSong);
+                System.out.println(textSong(split));
             }
         }
 
     }
 
     private String textSong(String[] split) {
+        String text;
         int index;
         StringBuilder stb = new StringBuilder(split[1]);
         String textSong = split[1];
-        if (checkingTextForLanguage(textSong.substring(0,10))) {
-            index = textSong.indexOf("Комментарии");
+        index = textSong.indexOf("Комментарии");
+
+        String textSong1 = stb.substring(0, index);
+
+        if (textSong1.substring((index - 26), index).equals(" Прочитать перевод текста ")) {
+            text = textSong1.substring(0, (index - 26));
         } else {
-            index = textSong.indexOf("Прочитать перевод текста");
+            text = stb.substring(0, index);
         }
 
-        return stb.substring(0, index);
+        if (text.contains(" № Топ ")) {
+           int index2 = text.indexOf(" № Топ ");
+           return text.substring(0, index2);
         }
+        return text;
+    }
 
-    private boolean checkingTextForLanguage(String text) {
+   private boolean checkingTextForLanguage(String text) {
         Pattern pattern = Pattern.compile(
                 "[" +                   //начало списка допустимых символов
                         "а-яА-ЯёЁ" +    //буквы русского алфавита
