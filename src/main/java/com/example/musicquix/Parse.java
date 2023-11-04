@@ -1,5 +1,8 @@
 package com.example.musicquix;
 
+import com.example.musicquix.model.Author;
+import com.example.musicquix.model.Song;
+import com.example.musicquix.model.TextTrack;
 import com.example.musicquix.repository.AuthorRepository;
 import com.example.musicquix.repository.SongRepository;
 import com.example.musicquix.repository.TextTrackRepository;
@@ -46,7 +49,7 @@ public class Parse {
                 String nameMusician = split2[0]; //имя исполнителя
                 String nameSong = split2[1].replace(" текст песни", ""); // название песни
                 String textSong = textSong(tx); // текст песни
-
+                addDatabase(nameMusician, nameSong, textSong);
 
             }
         }
@@ -67,7 +70,20 @@ public class Parse {
     }
 
     private void addDatabase (String nameMusician, String nameSong, String textSong) {
-
+        Author author = Author.builder()
+                .authorName(nameMusician)
+                .build();
+        authorRepository.save(author);
+        Song song = Song.builder()
+                .authorId(author.getId())
+                .songName(nameSong)
+                .build();
+        songRepository.save(song);
+        TextTrack textTrack = TextTrack.builder()
+                .songId(song.getId())
+                .snippetText(textSong)
+                .build();
+        textTrackRepository.save(textTrack);
     }
 
 }
