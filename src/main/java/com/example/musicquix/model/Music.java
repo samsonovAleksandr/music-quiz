@@ -7,15 +7,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "authors")
+@Table(name = "music")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Author {
+public class Music {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "author_name")
-    private String authorName;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "artist")
+    private String artist;
+    @Column(name = "lyrics")
+    private String lyrics;
 }

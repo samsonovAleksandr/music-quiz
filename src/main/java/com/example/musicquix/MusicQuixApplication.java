@@ -6,8 +6,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MusicQuixApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MusicQuixApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MusicQuixApplication.class, args);
+
+
+    }
+
 
 }
+
+
