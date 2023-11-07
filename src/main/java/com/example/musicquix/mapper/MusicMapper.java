@@ -24,7 +24,7 @@ public class MusicMapper {
         }
 
         Random random = new Random();
-        int rd = random.nextInt(0,3);
+        int rd = random.nextInt(4);
         musicDTOS.get(rd).setRight(true);
         return MusicJSON.builder()
                 .text(musics.get(rd).getLyrics())
