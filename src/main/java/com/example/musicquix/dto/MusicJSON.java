@@ -1,11 +1,11 @@
-package com.example.musicquix;
+package com.example.musicquix.dto;
 
+import com.example.musicquix.dto.MusicDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor

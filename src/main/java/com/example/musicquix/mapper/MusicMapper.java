@@ -1,5 +1,7 @@
-package com.example.musicquix;
+package com.example.musicquix.mapper;
 
+import com.example.musicquix.dto.MusicDTO;
+import com.example.musicquix.dto.MusicJSON;
 import com.example.musicquix.model.Music;
 import org.springframework.stereotype.Component;
 

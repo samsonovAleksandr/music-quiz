@@ -1,11 +1,12 @@
-package com.example.musicquix;
+package com.example.musicquix.service;
 
+import com.example.musicquix.dto.MusicJSON;
+import com.example.musicquix.mapper.MusicMapper;
 import com.example.musicquix.model.Music;
 import com.example.musicquix.repository.MusicRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 

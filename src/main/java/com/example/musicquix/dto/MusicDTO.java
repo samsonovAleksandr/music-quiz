@@ -1,4 +1,4 @@
-package com.example.musicquix;
+package com.example.musicquix.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
