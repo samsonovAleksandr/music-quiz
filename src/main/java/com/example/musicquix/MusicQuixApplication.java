@@ -14,6 +14,7 @@ public class MusicQuixApplication {
 
 
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {

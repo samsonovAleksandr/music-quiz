@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 @Component
 public class MusicMapper {
 
@@ -18,9 +20,12 @@ public class MusicMapper {
                     .build();
             musicDTOS.add(musicDTO);
         }
-        musicDTOS.get(0).setRight(true);
+
+        Random random = new Random();
+        int rd = random.nextInt(0,3);
+        musicDTOS.get(rd).setRight(true);
         return MusicJSON.builder()
-                .text(musics.get(0).getLyrics())
+                .text(musics.get(rd).getLyrics())
                 .options(musicDTOS)
                 .build();
     }
