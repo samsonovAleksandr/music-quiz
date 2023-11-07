@@ -21,10 +21,9 @@ public class MusicService {
     }
 
     public MusicJSON getMusics() {
-        long randomId = ThreadLocalRandom.current().nextLong(150L);
-
         List<Music> musics = new ArrayList<>();
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i <= 3; i++) {
+            long randomId = ThreadLocalRandom.current().nextLong(150L);
             musics.add(musicRepository.getReferenceById(randomId));
         }
         return musicMapper.requestMusic(musics);
