@@ -2,10 +2,11 @@ package com.example.musicquix;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
-@Controller("/api")
+@RestController
 public class MusicController {
     final MusicService musicService;
 
@@ -14,7 +15,7 @@ public class MusicController {
     }
 
     @GetMapping("/song")
-    public HashMap<String, String> getSongs() {
+    public MusicJSON getSongs() {
         return musicService.getMusics();
     }
 }

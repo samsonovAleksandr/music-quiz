@@ -4,30 +4,29 @@ import com.example.musicquix.model.Music;
 import com.example.musicquix.repository.MusicRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class MusicService {
 
     private final MusicRepository musicRepository;
+   private final MusicMapper musicMapper;
 
-    public MusicService(MusicRepository musicRepository) {
+    public MusicService(MusicRepository musicRepository, MusicMapper musicMapper) {
         this.musicRepository = musicRepository;
+        this.musicMapper = musicMapper;
     }
 
-    public HashMap<String, String> getMusics() {
-        long randomId = ThreadLocalRandom.current().nextLong(5134856L);
+    public MusicJSON getMusics() {
+        long randomId = ThreadLocalRandom.current().nextLong(150L);
 
-        HashMap<String, String> musicMap = new HashMap<>();
+        List<Music> musics = new ArrayList<>();
         for (int i = 0; i <= 2; i++) {
-            String artist = musicRepository.getReferenceById(randomId).getArtist();
-            musicMap.put(artist, null);
+            musics.add(musicRepository.getReferenceById(randomId));
         }
-
-        Music music = musicRepository.getReferenceById(randomId);
-        musicMap.put(music.getArtist(), music.getLyrics());
-
-        return musicMap;
+        return musicMapper.requestMusic(musics);
     }
 }

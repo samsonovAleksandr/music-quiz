@@ -12,6 +12,15 @@
       margin: 20px;
     }
 
+    #songText {
+      display: flex;
+      justify-content: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      padding: 10px 20px;
+    }
+
     .options {
       display: flex;
       justify-content: center;
@@ -29,66 +38,64 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Угадай песню или артиста</h1>
-    <p>по тексту песни</p>
+<div class="container">
+  <h1>Угадай песню или артиста</h1>
+  <p>по тексту песни</p>
 
-    <textarea id="songText" readonly></textarea>
+  <div id="songText"></div>
 
-    <div class="options">
-      <div class="option" id="option1"></div>
-      <div class="option" id="option2"></div>
-      <div class="option" id="option3"></div>
-      <div class="option" id="option4"></div>
-    </div>
+  <div class="options"></div>
 
-    <div id="message"></div>
-  </div>
+  <div id="message"></div>
+</div>
 
-  <script>
-    const songText = "Как дела, как дела, это новый кадиллак";
-    const options = ["ЛСП - Монетка", "Anacondaz - Бесит", "Моргентштерн - Кадиллак", "Многоточие - Зачем я нужен тебе"];
+<script>
 
-    document.getElementById("songText").value = songText;
+  function checkGuess(data) {
+    if (data.right) {
+      displayMessage("Красава");
+    } else {
+      displayMessage("Не угадал");
+    }
+  }
 
-    const optionElements = document.querySelectorAll('.option');
-    optionElements.forEach((optionElement, index) => {
-      optionElement.textContent = options[index];
-      optionElement.addEventListener('click', () => checkGuess(options[index]));
+  function displayMessage(message) {
+    document.getElementById("message").textContent = message;
+  }
+
+  function getResponse() {
+    return fetch('http://localhost:8080/song')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Проблема на сервере');
+              }
+              return response.json();
+            })
+            .then(guessData => {
+              return guessData;
+            })
+            .catch(error => {
+              console.error('Проблема', error);
+            });
+  }
+
+
+  getResponse().then(res => {
+    const guessData = res;
+    document.getElementById("songText").textContent = guessData.text;
+
+    const optionsContainer = document.getElementsByClassName('options')[0];
+    guessData.options.forEach((optionData, index) => {
+
+      const el = document.createElement('div');
+      el.className = 'option';
+      el.id = 'option-' + index;
+      el.textContent = `${optionData.author} - ${optionData.title}`;
+      el.addEventListener('click', () => checkGuess(optionData));
+      optionsContainer.appendChild(el);
     });
+  })
 
-    function checkGuess(selectedOption) {
-      const correctGuess = "Моргентштерн - Кадиллак";
-      if (selectedOption === correctGuess) {
-        displayMessage("Красава");
-      } else {
-        displayMessage("Не угадал");
-      }
-    }
-
-    function displayMessage(message) {
-      document.getElementById("message").textContent = message;
-    }
-
-    function getApiCall() {
-      // todo sima: каркас метода взаимодействия с бэком
-      const backendUrl = 'http://localhost:8080/api/song';
-
-      fetch(backendUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Проблема на сервере');
-          }
-          return response.json();
-        })
-        .then(songData => {
-          // todo sima - тут можно взаимодействовать со страницей
-          document.getElementById('songText').value = songData.lyrics;
-        })
-        .catch(error => {
-          console.error('Проблема', error);
-        });
-    }
-  </script>
+</script>
 </body>
 </html>
