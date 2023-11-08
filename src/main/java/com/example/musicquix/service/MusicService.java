@@ -25,8 +25,8 @@ public class MusicService {
     public MusicJSON getMusics() {
         List<Music> musics = new ArrayList<>();
         for (int i = 0; i <= 3; i++) {
-            long randomId = ThreadLocalRandom.current().nextLong(150L);
-            musics.add(musicRepository.getReferenceById(randomId));
+            long randomId = ThreadLocalRandom.current().nextLong(1L,150L);
+            musics.add(musicRepository.getReferenceById(randomId + i));
             musics.get(i).setLyrics(textSongSplit(musics.get(i).getLyrics()));
 
         }
