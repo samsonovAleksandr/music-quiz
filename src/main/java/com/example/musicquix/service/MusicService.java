@@ -34,15 +34,15 @@ public class MusicService {
     }
 
     private String textSongSplit(String text) {
-        String finalText = "";
+        StringBuilder finalText = new StringBuilder();
         String[] textSong = text.split("\n");
         Random random = new Random();
         int index = random.nextInt(textSong.length);
         if (index <= 5) index = 5;
         if (index >= (textSong.length - 5)) index = textSong.length - 5;
         for (int i = 0; i <= 4; i++) {
-            finalText += textSong[index + i] + "\n";
+            finalText.append(textSong[index + i]).append("\n");
         }
-        return finalText;
+        return finalText.toString();
     }
 }
