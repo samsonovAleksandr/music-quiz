@@ -4,9 +4,9 @@ import com.example.musicquix.model.Music;
 import com.example.musicquix.repository.MusicRepository;
 import lombok.Data;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
-import org.jsoup.nodes.Document;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Parse {
 
 
-   private final MusicRepository musicRepository;
+    private final MusicRepository musicRepository;
 
     public Parse(MusicRepository musicRepository) throws IOException {
         this.musicRepository = musicRepository;
@@ -44,10 +44,10 @@ public class Parse {
 
     }
 
-    private String textSong (String tx) {
+    private String textSong(String tx) {
         int index;
         index = tx.indexOf("jumbotron");
-        String tx2 = tx.substring(index+52);
+        String tx2 = tx.substring(index + 52);
         index = tx2.indexOf("</p>");
         tx2 = tx2.substring(0, index);
         tx2 = tx2.replace("<br>", "");
@@ -57,7 +57,7 @@ public class Parse {
         return "         " + tx2;
     }
 
-    private void addDatabase (String nameMusician, String nameSong, String textSong) {
+    private void addDatabase(String nameMusician, String nameSong, String textSong) {
         Music music = Music.builder()
                 .artist(nameMusician)
                 .title(nameSong)

@@ -1,7 +1,7 @@
 package com.example.musicquix.controller;
 
-import com.example.musicquix.service.MusicService;
 import com.example.musicquix.dto.MusicJSON;
+import com.example.musicquix.service.MusicService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
