@@ -1,0 +1,25 @@
+version: '3.8'
+
+ MusicQuix:
+  build: musicQ
+  image: music-image
+  container_name: musicQuiz
+  ports:
+    - "3000:3000"
+  depends_on:
+    - db
+  environment:
+    - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=password
+
+  db:
+    image: postgres:15-alpine
+    container_name: db_postgres
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
