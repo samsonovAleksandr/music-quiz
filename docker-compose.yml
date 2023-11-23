@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     musicQuix:
-     build: musicQ
+     build: musicQuix
      image: music-image
      container_name: musicQuiz
      ports:
