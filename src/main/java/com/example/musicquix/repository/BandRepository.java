@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MusicRepository extends JpaRepository<Band, Long> {
+public interface BandRepository extends JpaRepository<Band, Long> {
 }
