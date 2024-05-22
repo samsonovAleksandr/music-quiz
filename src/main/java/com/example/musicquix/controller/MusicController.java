@@ -22,8 +22,8 @@ public class MusicController {
 
     @GetMapping("test")
     public @ResponseBody String test() throws IOException, ParseException {
-        addDatabaseData.addSong(2);
-        addDatabaseData.addSong(1);
+      //  addDatabaseData.addSong(2);
+       // addDatabaseData.addSong(1);
       return "OK";
     }
 }
