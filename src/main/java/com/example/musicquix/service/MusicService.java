@@ -1,48 +1,60 @@
 package com.example.musicquix.service;
 
-import com.example.musicquix.dto.MusicJSON;
-import com.example.musicquix.mapper.MusicMapper;
-import com.example.musicquix.model.Music;
-import com.example.musicquix.repository.MusicRepository;
+import com.example.musicquix.model.Song;
+import com.example.musicquix.repository.BandRepository;
+import com.example.musicquix.repository.SongRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class MusicService {
 
-    private final MusicRepository musicRepository;
-    private final MusicMapper musicMapper;
+    @Autowired
+    BandRepository bandRepository;
 
-    public MusicService(MusicRepository musicRepository, MusicMapper musicMapper) {
-        this.musicRepository = musicRepository;
-        this.musicMapper = musicMapper;
-    }
+    @Autowired
+    SongRepository songRepository;
 
-    public MusicJSON getMusics() {
-        List<Music> musics = new ArrayList<>();
-        for (int i = 0; i <= 3; i++) {
-            long randomId = ThreadLocalRandom.current().nextLong(1L,150L);
-            musics.add(musicRepository.getReferenceById(randomId + i));
-            musics.get(i).setLyrics(textSongSplit(musics.get(i).getLyrics()));
+    Random rnd = new Random();
 
+
+    public String songLyrics() {
+        List<Song> songs = songRepository.getRandomSongs();
+        int i = rnd.nextInt(songs.size());
+        Song song = songs.get(i);
+
+        List<String> texts = textList(song.getTextSong());
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (String s: texts){
+            stringBuilder.append(s).append("\n");
         }
-        return musicMapper.requestMusic(musics);
+
+
+        return stringBuilder.toString();
     }
 
-    private String textSongSplit(String text) {
-        StringBuilder finalText = new StringBuilder();
-        String[] textSong = text.split("\n");
-        Random random = new Random();
-        int index = random.nextInt(textSong.length);
-        if (index <= 5) index = 5;
-        if (index >= (textSong.length - 5)) index = textSong.length - 5;
-        for (int i = 0; i <= 4; i++) {
-            finalText.append(textSong[index + i]).append("\n");
+
+    private List<String> textList(String text) {
+
+        String[] str = text.split("\n");
+
+        int start = rnd.nextInt(str.length - 5);
+        int stop = start + 4;
+        List<String> textSongs = new ArrayList<>();
+
+        for(int i = start; i <= stop; i++ ) {
+            textSongs.add(str[i]);
         }
-        return finalText.toString();
+
+        return textSongs;
     }
+
+
+
 }
