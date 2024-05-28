@@ -5,4 +5,4 @@
 
 Ссылка на бота:
 
-## [@MQIZ_BOT](https://web.telegram.org/a/#6637545402)
+## [@MQIZ_BOT](https://t.me/MQIZ_BOT)
