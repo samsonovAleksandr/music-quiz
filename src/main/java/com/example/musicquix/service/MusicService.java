@@ -1,14 +1,13 @@
 package com.example.musicquix.service;
 
+import com.example.musicquix.dto.SongDTO;
 import com.example.musicquix.model.Song;
 import com.example.musicquix.repository.BandRepository;
 import com.example.musicquix.repository.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class MusicService {
@@ -22,7 +21,7 @@ public class MusicService {
     Random rnd = new Random();
 
 
-    public String songLyrics() {
+    public SongDTO songLyrics() {
         List<Song> songs = songRepository.getRandomSongs();
         int i = rnd.nextInt(songs.size());
         Song song = songs.get(i);
@@ -31,12 +30,24 @@ public class MusicService {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (String s: texts){
+        for (String s : texts) {
             stringBuilder.append(s).append("\n");
         }
 
+        String bandName = bandRepository.getReferenceById(song.getBandId()).getName();
+        songs.remove(i);
 
-        return stringBuilder.toString();
+
+        List<String> bandsList = bandsName(songs);
+        Map<String, String> songBands = new HashMap<>();
+        songBands.put(stringBuilder.toString(), bandName);
+
+        SongDTO songDTO = SongDTO.builder()
+                .songBand(songBands)
+                .bandNames(bandsList)
+                .build();
+
+        return songDTO;
     }
 
 
@@ -48,13 +59,25 @@ public class MusicService {
         int stop = start + 4;
         List<String> textSongs = new ArrayList<>();
 
-        for(int i = start; i <= stop; i++ ) {
+        for (int i = start; i <= stop; i++) {
             textSongs.add(str[i]);
         }
 
         return textSongs;
     }
 
+
+    private List<String> bandsName(List<Song> songs) {
+
+        List<String> bands = new ArrayList<>();
+
+        for (Song s : songs) {
+            long bandId = s.getBandId();
+            bands.add(bandRepository.getReferenceById(bandId).getName());
+        }
+        return bands;
+
+    }
 
 
 }
