@@ -6,13 +6,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,8 +46,44 @@ public class TelegramBot extends TelegramLongPollingBot {
                     break;
                 case "/game":
                     game(chatId, service.songLyrics());
+                case "/config":
+
 
             }
+        } else if (update.hasCallbackQuery()) {
+            String callbackData = update.getCallbackQuery().getData();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            if (callbackData.equals("1")) {
+                String text = "Правильный ответ!";
+                executeEditMessageText(text, chatId, messageId);
+            } else if (!(callbackData.equals("1"))) {
+                String band = "";
+                for (List<InlineKeyboardButton> list : update.getCallbackQuery().getMessage().getReplyMarkup().getKeyboard()) {
+                    for (InlineKeyboardButton l2 : list) {
+                        if (l2.getCallbackData().equals("1")) {
+                            band = l2.getText();
+                        }
+                    }
+                }
+                String text = "Ответ неверный :(" + " Правильный ответ: " + band;
+                executeEditMessageText(text, chatId, messageId);
+            }
+        }
+    }
+
+
+    private void executeEditMessageText(String text, long chatId, long messageId) {
+        EditMessageText message = new EditMessageText();
+        message.setChatId(String.valueOf(chatId));
+        message.setText(text);
+        message.setMessageId((int) messageId);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,7 +119,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void game(long chatId, SongDTO songDTO){
+    private void game(long chatId, SongDTO songDTO) {
 
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -96,7 +132,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         var button1 = new InlineKeyboardButton();
 
-        button1.setText(songDTO.getSongBand().values().toString());
+        String text = "";
+
+        for (String s : songDTO.getSongBand().values()) {
+            text = s + text;
+        }
+
+        button1.setText(text);
         button1.setCallbackData("1");
 
         var button2 = new InlineKeyboardButton();
@@ -113,8 +155,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         button4.setText(songDTO.getBandNames().get(2));
         button4.setCallbackData("4");
-
-
 
 
         rowInLine1.add(button1);
@@ -142,8 +182,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
 
-
-    private void executeMessage(SendMessage message){
+    private void executeMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
