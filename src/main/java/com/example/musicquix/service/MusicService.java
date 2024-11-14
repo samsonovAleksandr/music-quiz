@@ -1,5 +1,6 @@
 package com.example.musicquix.service;
 
+import com.example.musicquix.bot.Language;
 import com.example.musicquix.dto.SongDTO;
 import com.example.musicquix.model.Song;
 import com.example.musicquix.repository.BandRepository;
@@ -21,8 +22,16 @@ public class MusicService {
     Random rnd = new Random();
 
 
-    public SongDTO songLyrics() {
-        List<Song> songs = songRepository.getRandomSongs();
+    public SongDTO songLyrics(Language language) {
+
+        List<Song> songs;
+       if (language == Language.ENGLISH){
+           songs = songRepository.getRandomSongs();
+       } else {
+        songs = songRepository.getRandomSongsRus();
+       }
+
+
         int i = rnd.nextInt(songs.size());
         Song song = songs.get(i);
 

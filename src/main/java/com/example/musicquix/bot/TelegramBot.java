@@ -3,6 +3,8 @@ package com.example.musicquix.bot;
 import com.example.musicquix.dto.SongDTO;
 import com.example.musicquix.service.MusicService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,13 +19,15 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
 
     private final MusicService service;
 
     private final Button button;
+
+    Language language = Language.ENGLISH;
 
     @Override
     public String getBotUsername() {
@@ -37,6 +41,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
@@ -45,9 +50,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                     break;
                 case "/game":
-                    game(chatId, service.songLyrics());
-                case "/config":
-
+                    game(chatId, service.songLyrics(language));
+                case "/only_rus":
+            if (language.equals(Language.ENGLISH)) {
+                language = Language.RUSSIAN;
+            }
 
             }
         } else if (update.hasCallbackQuery()) {
