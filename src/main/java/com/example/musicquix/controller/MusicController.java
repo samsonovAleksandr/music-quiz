@@ -2,6 +2,7 @@ package com.example.musicquix.controller;
 
 import com.example.musicquix.parse.ParseHTML;
 import com.example.musicquix.service.MusicService;
+import com.example.musicquix.utils.AddDataBaseThead;
 import com.example.musicquix.utils.AddDatabaseData;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,17 +14,18 @@ import java.text.ParseException;
 @RestController
 public class MusicController {
     final MusicService musicService;
-    final AddDatabaseData addDatabaseData;
+    final AddDataBaseThead addDatabaseData;
 
-    public MusicController(MusicService musicService, AddDatabaseData addDatabaseData) {
+    public MusicController(MusicService musicService, AddDataBaseThead addDatabaseData) {
         this.musicService = musicService;
         this.addDatabaseData = addDatabaseData;
     }
 
+
     @GetMapping("test")
     public @ResponseBody String test() throws IOException, ParseException {
-      //  addDatabaseData.addSong(2);
-       // addDatabaseData.addSong(1);
+      AddDataBaseThead.addSong(2);
+      AddDataBaseThead.addSong(1);
       return "OK";
     }
 }
