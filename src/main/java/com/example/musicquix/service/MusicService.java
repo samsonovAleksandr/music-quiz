@@ -67,7 +67,7 @@ public class MusicService {
             List<String> options = new ArrayList<>(wrong);
             options.add(correct);
             Collections.shuffle(options, rnd);
-            return new QuizQuestion(lyrics, List.copyOf(options), options.indexOf(correct));
+            return new QuizQuestion(lyrics, song.get().getNameSong(), List.copyOf(options), options.indexOf(correct));
         }
         throw new NoQuestionException("Could not build a question after " + MAX_ATTEMPTS + " attempts");
     }
