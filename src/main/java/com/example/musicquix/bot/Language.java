@@ -1,11 +1,23 @@
 package com.example.musicquix.bot;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 public enum Language {
+    RUSSIAN("Русский", "Русский язык"),
+    ENGLISH("English", "English");
 
-    RUSSIAN,
-    ENGLISH
+    private final String label;
+    private final String dbValue;
+
+    Language(String label, String dbValue) {
+        this.label = label;
+        this.dbValue = dbValue;
+    }
+
+    public String label() {
+        return label;
+    }
+
+    /** Value stored in {@code language_texts.languages}. */
+    public String dbValue() {
+        return dbValue;
+    }
 }

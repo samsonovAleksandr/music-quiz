@@ -1,25 +1,35 @@
-version: '3.8'
 services:
-    musicQuix:
-     build: musicQuix
-     image: music-image
-     container_name: musicQuiz
-     ports:
-       - "3000:3000"
-     depends_on:
-      - db
-     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/musicquiz
-      - POSTGRES_USER=sima
-      - POSTGRES_PASSWORD=password
+  app:
+    build: .
+    container_name: music_quiz
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-musicquiz}
+      POSTGRES_USER: ${POSTGRES_USER:-musicquiz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      BOT_TOKEN: ${BOT_TOKEN:?set BOT_TOKEN in .env}
+      BOT_NAME: ${BOT_NAME:-MQIZ_BOT}
 
-    db:
-     image: postgres:15-alpine
-     container_name: db_postgres
-     ports:
-     - "6541:5432"
-     environment:
-     - POSTGRES_DB=musicquiz
-       - POSTGRES_USER=sima
-       - POSTGRES_PASSWORD=postgres
-     - POSTGRES_HOST_AUTH_METHOD=trust
+  db:
+    image: postgres:15-alpine
+    container_name: music_quiz_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-musicquiz}
+      POSTGRES_USER: ${POSTGRES_USER:-musicquiz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
