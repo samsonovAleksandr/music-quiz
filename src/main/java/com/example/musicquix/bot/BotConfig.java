@@ -1,18 +1,19 @@
 package com.example.musicquix.bot;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@Data
-@PropertySource("classpath:/application.properties")
-@ComponentScan
+@Component
+@Getter
 public class BotConfig {
     @Value("${bot.name}")
-    String botName;
+    private String botName;
+
     @Value("${bot.token}")
-    String token;
+    private String token;
+
+    public boolean isConfigured() {
+        return token != null && !token.isBlank();
+    }
 }

@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,9 +23,10 @@ public class Song {
     @Column(name = "name_song")
     private String nameSong;
     @Column(name = "text_song")
+    @ToString.Exclude
     private String textSong;
     @Column(name = "release_date")
-    private Date releaseDate;
+    private LocalDate releaseDate;
 
 
 }
